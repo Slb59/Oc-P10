@@ -1,6 +1,7 @@
 # no environnement, ide files
 __pycache__
 .venv
+.env
 
 # no database
 db.sqlite3
