@@ -31,3 +31,36 @@ class Project(models.Model):
 
     def get_type(self):
         return Project.Platform(self.type)
+
+
+class Contributor(models.Model):
+
+    class Permission(models.TextChoices):
+        READ = "RD", _('Read')
+        ALL = "UD", _('Update and delete')
+
+    class Role(models.TextChoices):
+        AUTHOR = "AUTH", _('Author')
+        MANAGER = "MANG", _('Manager')
+        CREATOR = "CREA", _('Creator')
+
+    user_contributor = models.ForeignKey(
+        to=User, related_name="user_contributor", on_delete=models.CASCADE,
+        blank=True, null=True
+        )
+
+    project_contributor = models.ForeignKey(
+        to=Project, related_name="project_contributor",
+        on_delete=models.CASCADE,
+        blank=True, null=True
+        )
+
+    permission = models.CharField(
+        max_length=2, choices=Permission.choices, default="UD"
+        )
+
+    role = models.CharField(
+        max_length=4, choices=Role.choices, default="AUTH")
+
+    def __str__(self):
+        return "Contributor:" + str(self.user_id)
