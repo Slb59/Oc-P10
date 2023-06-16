@@ -18,7 +18,7 @@ class Project(models.Model):
         max_length=3, choices=Platform.choices, default="BKE"
         )
     author = models.ForeignKey(
-        to=User, related_name="author",
+        to=User, related_name="author_project",
         on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
@@ -27,7 +27,7 @@ class Project(models.Model):
         ]
 
     def __str__(self):
-        return "Project:" + self.title
+        return "Project: " + self.title
 
     def get_type(self):
         return Project.Platform(self.type)
@@ -63,4 +63,49 @@ class Contributor(models.Model):
         max_length=4, choices=Role.choices, default="AUTH")
 
     def __str__(self):
-        return "Contributor:" + str(self.user_id)
+        return "Contributor: " + str(self.user_contributor)
+
+
+class Issue(models.Model):
+
+    class Tag(models.TextChoices):
+        BUG = "BUG", _('Bug')
+        TASK = "TSK", _('Task')
+        UPGRADE = "UPG", _('Upgrade')
+
+    class Priority(models.TextChoices):
+        LOW = "LOW", _('Low')
+        MEDIUM = "MED", _('Medium')
+        HIGH = "HIG", _('High')
+
+    class Status(models.TextChoices):
+        PENDING = "PND", _('Pending')
+        OPEN = "OPN", _('Open')
+        CLOSED = "CLO", _('Close')
+
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=512, blank=True)
+    tag = models.CharField(max_length=3, choices=Tag.choices, default='BUG')
+    priority = models.CharField(
+        max_length=3, choices=Priority.choices, default="LOW"
+        )
+
+    project = models.ForeignKey(
+        to=Project, on_delete=models.CASCADE, blank=True, null=True
+        )
+
+    status = models.CharField(
+        max_length=7, choices=Status.choices, default="PND"
+        )
+    author = models.ForeignKey(
+        to=User, related_name="author_issue", on_delete=models.CASCADE,
+        blank=True, null=True
+        )
+    assignee = models.ForeignKey(
+        to=User, related_name="assignee", on_delete=models.CASCADE,
+        blank=True, null=True
+        )
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'Issue: ' + self.title
