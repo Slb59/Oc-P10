@@ -107,3 +107,6 @@ class CommentTestCase(BaseModelTestCase):
         self.assertEqual(
             comment.description, 'Please use reinit your password link'
             )
+        self.assertEqual(
+            1, len(Comment.objects.filter(description__startswith='Please'))
+            )
