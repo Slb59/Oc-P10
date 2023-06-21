@@ -17,7 +17,7 @@ class BaseModelTestCase(TestCase):
             title='Projet 1',
             description='Tout premier projet',
             type='FRE',
-            author=cls.osy
+            # author=cls.osy
             )
 
 

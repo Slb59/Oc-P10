@@ -5,3 +5,4 @@ __pycache__
 
 # no database
 db.sqlite3
+savedb

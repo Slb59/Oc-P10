@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from config import env
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,10 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
+RESTAPI_APPS = [
+    'rest_framework',
+]
+
 SOFTDESK_APPS = [
     "softdesk.account.apps.AccountConfig",
     "softdesk.helpdesk.apps.HelpdeskConfig",
@@ -45,7 +50,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + SOFTDESK_APPS
+INSTALLED_APPS = DJANGO_APPS + RESTAPI_APPS + SOFTDESK_APPS
 
 
 MIDDLEWARE = [
@@ -140,3 +145,21 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+}

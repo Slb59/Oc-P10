@@ -9,7 +9,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ["title", "description", "type"]
     list_filter = ["type"]
     search_fields = ["title", "description"]
-    raw_id_fields = ["author"]
+    raw_id_fields = ["contributors"]
 
 
 @admin.register(Issue)
