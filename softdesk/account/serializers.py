@@ -14,6 +14,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'username',
             'first_name', 'last_name',
+            'email', 'post_description'
+            ]
+
+
+class UserSignupSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+        )
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username',
+            'first_name', 'last_name',
             'email', 'password', 'post_description'
             ]
 

@@ -159,3 +159,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
 }
+
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': '/admin/login/',
+    'LOGIN_LOGOUT': '/admin/logout/'
+}

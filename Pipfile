@@ -11,6 +11,7 @@ djangorestframework-simplejwt = "*"
 coreapi = "*"
 pyyaml = "*"
 drf-yasg = "*"
+drf-nested-routers = "*"
 
 [dev-packages]
 
