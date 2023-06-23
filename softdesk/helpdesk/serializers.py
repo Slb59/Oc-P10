@@ -6,7 +6,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['project_id', 'title', 'description', 'type', 'contributors']
+        fields = ['id', 'title', 'description', 'type', 'contributors']
 
         def create(self, validated_data):
             project = Project.objects.create(**validated_data)
@@ -18,7 +18,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             Contributor.objects.create(
                 user_contributor=request_user,
                 project_contributor=project,
-                permission="All",
+                permission=Contributor.Permission.ALL,
                 role=Contributor.Role.AUTHOR
                 )
 

@@ -11,7 +11,6 @@ class Project(models.Model):
         ANDROID = "AND", _('Android')
         IOS = "IOS", _('Ios')
 
-    project_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=512, default="")
 
@@ -46,8 +45,6 @@ class Contributor(models.Model):
         AUTHOR = "AUTH", _('Author')
         MANAGER = "MANG", _('Manager')
         CREATOR = "CREA", _('Creator')
-
-    contributor_id = models.AutoField(primary_key=True)
 
     user_contributor = models.ForeignKey(
         to=User, related_name="user_contributor", on_delete=models.CASCADE,
@@ -88,7 +85,6 @@ class Issue(models.Model):
         OPEN = "OPN", _('Open')
         CLOSED = "CLO", _('Close')
 
-    issue_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=512, default="")
     tag = models.CharField(max_length=3, choices=Tag.choices, default='BUG')
@@ -119,7 +115,6 @@ class Issue(models.Model):
 
 class Comment(models.Model):
 
-    comment_id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=512, default="")
     author = models.ForeignKey(
         to=User, related_name="author_comment", on_delete=models.CASCADE,

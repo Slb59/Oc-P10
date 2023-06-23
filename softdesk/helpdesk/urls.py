@@ -6,7 +6,7 @@ from .views import ProjectViewSet
 app_name = "helpdesk"
 
 helpdesk_router = routers.SimpleRouter()
-helpdesk_router.register('projects', ProjectViewSet, basename='projects')
+helpdesk_router.register('projects', ProjectViewSet)
 
 urlpatterns = [
     path('', include(helpdesk_router.urls))

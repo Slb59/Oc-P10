@@ -155,12 +155,20 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
 }
 
 SWAGGER_SETTINGS = {
-    'LOGIN_URL': '/admin/login/',
-    'LOGIN_LOGOUT': '/admin/logout/'
+    # 'LOGIN_URL': '/admin/login/',
+    # 'LOGIN_LOGOUT': '/admin/logout/',
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        },
+    },
 }

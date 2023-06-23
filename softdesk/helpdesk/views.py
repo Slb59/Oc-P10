@@ -13,5 +13,5 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return Project.objects.filter(contributors=self.request.user)
+    # def get_queryset(self):
+    # return Project.objects.filter(contributors=self.request.user)
