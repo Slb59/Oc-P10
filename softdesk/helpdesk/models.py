@@ -21,7 +21,8 @@ class Project(models.Model):
     #     to=User, related_name="author_project",
     #     on_delete=models.CASCADE, blank=True, null=True)
 
-    contributors = models.ManyToManyField(User, through='Contributor')
+    contributors = models.ManyToManyField(
+        User, through='Contributor', related_name='contributing')
 
     class Meta:
         constraints = [
@@ -36,26 +37,6 @@ class Project(models.Model):
 
 
 class Contributor(models.Model):
-
-    #     SEMESTER_CHOICES = (
-    #     ("1", "1"),
-    #     ("2", "2"),
-    #     ("3", "3"),
-    #     ("4", "4"),
-    #     ("5", "5"),
-    #     ("6", "6"),
-    #     ("7", "7"),
-    #     ("8", "8"),
-    # )
-    
-    # # declaring a Student Model
-    
-    # class Student(models.Model):
-    #       semester = models.CharField(
-    #         max_length = 20,
-    #         choices = SEMESTER_CHOICES,
-    #         default = '1'
-    #         )
 
     class Permission(models.TextChoices):
         READ = "RD", _('Read')
@@ -83,6 +64,9 @@ class Contributor(models.Model):
 
     role = models.CharField(
         max_length=4, choices=Role.choices, default="AUTH")
+
+    class Meta:
+        unique_together = ('user_contributor', 'project_contributor')
 
     def __str__(self):
         return "Contributor: " + str(self.user_contributor)
