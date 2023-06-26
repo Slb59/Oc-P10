@@ -37,6 +37,26 @@ class Project(models.Model):
 
 class Contributor(models.Model):
 
+    #     SEMESTER_CHOICES = (
+    #     ("1", "1"),
+    #     ("2", "2"),
+    #     ("3", "3"),
+    #     ("4", "4"),
+    #     ("5", "5"),
+    #     ("6", "6"),
+    #     ("7", "7"),
+    #     ("8", "8"),
+    # )
+    
+    # # declaring a Student Model
+    
+    # class Student(models.Model):
+    #       semester = models.CharField(
+    #         max_length = 20,
+    #         choices = SEMESTER_CHOICES,
+    #         default = '1'
+    #         )
+
     class Permission(models.TextChoices):
         READ = "RD", _('Read')
         ALL = "UD", _('Update and delete')
