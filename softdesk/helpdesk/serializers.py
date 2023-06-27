@@ -3,18 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from .models import Project, Contributor
 
 
-# class ContributorSerializer(serializers.HyperlinkedModelSerializer):
-
-#     id = serializers.ReadOnlyField(source='user_contributor.id')
-#     name = serializers.ReadOnlyField(source='user_contributor.username')
-
-#     class Meta:
-#         model = Contributor
-#         fields = [
-#             'id', 'name',
-#             'permission', 'role'
-#             ]
-
 class ContributorSerializer(serializers.ModelSerializer):
 
     class Meta:

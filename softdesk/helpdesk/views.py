@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .models import Project, Contributor
 from .serializers import ProjectSerializer, ProjectDetailSerializer
 from .serializers import ContributorSerializer
+from .permissions import IsAuthor
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -27,7 +28,14 @@ class ProjectViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     detail_serializer_class = ProjectDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAuthor]
+
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'delete']:
+            permission_classes = [permissions.IsAuthenticated, IsAuthor]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         return Project.objects.filter(contributors=self.request.user)
