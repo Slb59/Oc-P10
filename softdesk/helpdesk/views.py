@@ -1,8 +1,11 @@
 from django.utils.decorators import method_decorator
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 from rest_framework.exceptions import ValidationError
+
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from .models import Project, Contributor
 from .serializers import ProjectSerializer, ProjectDetailSerializer
@@ -10,16 +13,50 @@ from .serializers import ContributorSerializer
 from .permissions import IsAuthor
 
 
+response_project_schema_200 = {
+    "200": openapi.Response(
+        description="200 description",
+        examples={
+            "application/json": {
+                "200_id": "project_id",
+                "200_title": "Project title",
+                "200_description": "Description of the project",
+                "200_type": "BKE for backend for example",
+                "200_contributors": "Liste of contributors",
+                "200_author": "user that create the project",
+            }
+        }
+    ),
+}
+response_project_schema_201 = {
+    "201": openapi.Response(
+        description="200 description",
+        examples={
+            "application/json": {
+                "200_id": "a new project_id",
+                "200_title": "Project title",
+                "200_description": "Description of the project",
+                "200_type": "BKE for backend for example",
+                "200_contributors": "the user as author",
+            }
+        }
+    ),
+}
+
+
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="List only the project if "
     + "the connected user is a contributor",
+    responses=response_project_schema_200
 ))
 @method_decorator(name='create', decorator=swagger_auto_schema(
     operation_description="Any connected user can create a projet"
     + "he would be the author",
+    responses=response_project_schema_201
 ))
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(
     operation_description="User must be a contributor to read the project",
+    responses=response_project_schema_200
 ))
 class ProjectViewSet(ModelViewSet):
     """
