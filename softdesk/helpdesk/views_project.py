@@ -92,19 +92,19 @@ class ContributorViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
-        # project_pk is the primary key of project
+        # projects_pk is the primary key of project
         return Contributor.objects.filter(
-            project_contributor=self.kwargs.get('project_pk'))
+            project_contributor=self.kwargs.get('projects_pk'))
 
     def perform_create(self, serializer, *args, **kwargs):
-        project = Project.objects.get(pk=self.kwargs.get('project_pk'))
+        project = Project.objects.get(pk=self.kwargs.get('projects_pk'))
 
-        # Check if the user is is already contributor
+        # Check if the user is already contributor
         user_list = [
-            user.user_id.id for user in Contributor.objects.filter(
+            user.user_contributor.id for user in Contributor.objects.filter(
                 project_contributor=project)
             ]
-        if self.request.data.get('user_id') in user_list:
+        if self.request.data.get('user_contributor') in user_list:
             raise ValidationError("this user is already contributor")
         else:
-            serializer.save(project_id=project)
+            serializer.save(project_contributor=project)

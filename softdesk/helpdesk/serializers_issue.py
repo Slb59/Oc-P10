@@ -21,6 +21,7 @@ class IssueSerializer(serializers.ModelSerializer):
         issue.save()
         return issue
 
+    @staticmethod
     def check_assignee_user(issue):
         # Get project
         project = Project.objects.get(pk=issue.project.id)
