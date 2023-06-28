@@ -68,7 +68,7 @@ class ProjectViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsAuthor]
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'delete']:
+        if self.action in ['update', 'partial_update', 'destroy']:
             permission_classes = [permissions.IsAuthenticated, IsAuthor]
         else:
             permission_classes = [permissions.IsAuthenticated]
