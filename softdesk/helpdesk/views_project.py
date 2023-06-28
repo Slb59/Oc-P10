@@ -8,8 +8,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import Project, Contributor
-from .serializers import ProjectSerializer, ProjectDetailSerializer
-from .serializers import ContributorSerializer
+from .serializers_project import ProjectSerializer, ProjectDetailSerializer
+from .serializers_project import ContributorSerializer
 from .permissions import IsAuthor
 
 

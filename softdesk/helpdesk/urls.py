@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework_nested import routers
 
-from .views import ProjectViewSet
+from .views_project import ProjectViewSet
 # from .views import ContributorViewSet
 
 app_name = "helpdesk"
