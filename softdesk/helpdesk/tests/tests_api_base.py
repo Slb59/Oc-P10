@@ -2,7 +2,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from .models import User
+from softdesk.account.models import User
 
 
 class BaseAPITestCase(APITestCase):
@@ -44,3 +44,17 @@ class BaseAPITestCase(APITestCase):
     def api_authentication(self, token=None):
         token = self.token if (token is None) else token
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
+
+    def get_list_without_autentification(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        # Authentication credentials were not provided
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def get_list_with_admin_authentification(self):
+
+        # with admin authentification
+        self.client.logout()
+        self.api_authentication(self.get_token('admin', 'password123'))
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

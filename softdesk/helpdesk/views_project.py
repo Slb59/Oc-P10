@@ -10,7 +10,7 @@ from drf_yasg import openapi
 from .models import Project, Contributor
 from .serializers_project import ProjectSerializer, ProjectDetailSerializer
 from .serializers_project import ContributorSerializer
-from .permissions import IsAuthor
+from .permissions import IsAuthor, IsContributor, IsAuthorContributor
 
 
 response_project_schema_200 = {
@@ -108,3 +108,13 @@ class ContributorViewSet(ModelViewSet):
             raise ValidationError("this user is already contributor")
         else:
             serializer.save(project_contributor=project)
+
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'destroy', 'create']:
+            permission_classes = [
+                permissions.IsAuthenticated,
+                IsAuthorContributor
+                ]
+        else:
+            permission_classes = [permissions.IsAuthenticated, IsContributor]
+        return [permission() for permission in permission_classes]

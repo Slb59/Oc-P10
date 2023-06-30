@@ -1,6 +1,6 @@
 from rest_framework import status
 
-from .models import Project, Contributor
+from softdesk.helpdesk.models import Project, Contributor
 from .tests_api_base import BaseAPITestCase
 
 
@@ -15,14 +15,8 @@ class TestProject(BaseAPITestCase):
 
     def test_list(self):
 
-        response = self.client.get(self.url)
-        # Authentication credentials were not provided
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-        # with admin authentification
-        self.api_authentication(self.get_token('admin', 'password123'))
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.get_list_without_autentification()
+        self.get_list_with_admin_authentification()        
 
         # list only the project if contributor
         # create 2 projects
