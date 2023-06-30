@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.db.utils import IntegrityError
 
 from softdesk.account.models import User
 from softdesk.helpdesk.models import Project, Contributor
@@ -59,6 +60,16 @@ class ContributorTestCase(BaseModelTestCase):
     def test_count_contributor(self):
         count = Contributor.objects.count()
         self.assertEqual(count, 3)
+
+    def test_unique_constrainte(self):
+        with self.assertRaises(Exception) as raised:
+            Contributor.objects.create(
+                user_contributor=self.fiann,
+                project_contributor=self.p1,
+                permission=Contributor.Permission.READ,
+                role=Contributor.Role.CREATOR  # only one creator ?
+            )
+        self.assertEqual(IntegrityError, type(raised.exception)) 
 
 
 class IssueTestCase(BaseModelTestCase):

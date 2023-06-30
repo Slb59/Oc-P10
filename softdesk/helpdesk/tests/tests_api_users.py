@@ -16,7 +16,7 @@ class TestContributor(BaseAPITestCase):
             )
 
         # create a new project
-        self.api_authentication(self.get_token('admin', 'password123'))
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.post('/projects/', self.p1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # with a manager
@@ -28,7 +28,7 @@ class TestContributor(BaseAPITestCase):
             )
 
         self.creator = {
-            "user_contributor": 3,
+            "user_contributor": 4,  # fiann
             "project_contributor": 1,
             "permission": "RD",
             "role": "CREA",
@@ -38,6 +38,7 @@ class TestContributor(BaseAPITestCase):
 
         self.get_list_without_autentification()
         self.get_list_with_admin_authentification()
+        self.get_list_with_author_authentification()
 
     def test_create(self):
 
@@ -54,16 +55,11 @@ class TestContributor(BaseAPITestCase):
         response = self.client.post(self.url, self.creator)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        # create with the author:admin
+        # create with the author:dazak
         self.client.logout()
-        self.api_authentication(self.get_token('admin', 'password123'))
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.post(self.url, self.creator)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # create the same contributor
-        response = self.client.post(self.url, self.creator)
-        print(response.data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update(self):
 
@@ -75,4 +71,41 @@ class TestContributor(BaseAPITestCase):
         response = self.client.put(self.url+'1/', self.creator)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # with dazak authentification
+        self.client.logout()
+        self.api_authentication(self.get_token('dazak', 'password123'))
+        response = self.client.put(self.url+'1/', self.creator)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_delete(self):
+
+        # without authentification
+        self.client.logout()
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # with manager connection
+        self.client.logout()
+        self.api_authentication(self.get_token('osynia', 'password123'))
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # with dazak : if the author is delete,
+        # you must be superuser to create another one
+        self.client.logout()
+        self.api_authentication(self.get_token('dazak', 'password123'))        
+        response = self.client.get(self.url)
+        data = response.json()["results"]
+        self.assertEqual(len(data), 2)
+        response = self.client.delete(self.url+'2/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(self.url)
+        data = response.json()["results"]
+
+        # delete the author then verify the project data
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get('/projects/1/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        print(response.data)
+        self.assertEqual(True, False)

@@ -11,6 +11,7 @@ from .models import Project, Contributor
 from .serializers_project import ProjectSerializer, ProjectDetailSerializer
 from .serializers_project import ContributorSerializer
 from .permissions import IsAuthor, IsContributor, IsAuthorContributor
+from .permissions import NoPermission
 
 
 response_project_schema_200 = {
@@ -110,11 +111,15 @@ class ContributorViewSet(ModelViewSet):
             serializer.save(project_contributor=project)
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy', 'create']:
+        if self.action in ['destroy', 'create']:
             permission_classes = [
                 permissions.IsAuthenticated,
                 IsAuthorContributor
                 ]
+        elif self.action in ['update', 'partial_update']:
+            permission_classes = [
+                NoPermission,
+            ]
         else:
             permission_classes = [permissions.IsAuthenticated, IsContributor]
         return [permission() for permission in permission_classes]

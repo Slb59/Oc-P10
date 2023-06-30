@@ -16,7 +16,8 @@ class TestProject(BaseAPITestCase):
     def test_list(self):
 
         self.get_list_without_autentification()
-        self.get_list_with_admin_authentification()        
+        self.get_list_with_admin_authentification()
+        self.get_list_with_author_authentification()
 
         # list only the project if contributor
         # create 2 projects
@@ -30,7 +31,7 @@ class TestProject(BaseAPITestCase):
             project_contributor=project_test,
             role='MANG'
             )
-        # count the projects listing has admin
+        # count the projects listing has dazak
         response = self.client.get(self.url)
         data = response.json()["results"]
         self.assertEqual(len(data), 2)
@@ -49,15 +50,15 @@ class TestProject(BaseAPITestCase):
         response = self.client.post(self.url, self.p1)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        # with admin authentification
-        self.api_authentication(self.get_token('admin', 'password123'))
+        # with dazak authentification
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.post(self.url, self.p1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_update(self):
 
         # post a new project
-        self.api_authentication(self.get_token('admin', 'password123'))
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.post(self.url, self.p1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -66,8 +67,8 @@ class TestProject(BaseAPITestCase):
         response = self.client.put(self.url+'1/', self.p1)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        # with admin authentification, the author of p1
-        self.api_authentication(self.get_token('admin', 'password123'))
+        # with dazak authentification, the author of p1
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.put(self.url+'1/', self.p1)
         # self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -92,7 +93,7 @@ class TestProject(BaseAPITestCase):
     def test_delete(self):
 
         # post a new project
-        self.api_authentication(self.get_token('admin', 'password123'))
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.post(self.url, self.p1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -113,8 +114,8 @@ class TestProject(BaseAPITestCase):
         # self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        # with admin authentification, the author of p1
-        self.api_authentication(self.get_token('admin', 'password123'))
+        # with dazak authentification, the author of p1
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.delete(self.url+'1/')
         # self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

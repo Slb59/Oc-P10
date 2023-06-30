@@ -8,21 +8,27 @@ from softdesk.account.models import User
 class BaseAPITestCase(APITestCase):
 
     def setUp(self) -> None:
+        # create a superuser
         self.user_admin = User.objects.create_user(
             username='admin', password='password123'
             )
         self.user_admin.is_superuser = True
         self.user_admin.save()
 
+        # create a user that would be an author
+        self.user_dazak = User.objects.create_user(
+            username='dazak', password='password123'
+            )
+
+        # create a user that would be a manager
         self.user_osynia = User.objects.create_user(
             username='osynia', password='password123'
             )
-        self.user_osynia.save()
 
         self.p1 = {'title': 'Projet test',
                    "description": "Description du projet test",
                    "type": "BKE",
-                   'author': self.user_admin.id
+                   'author': self.user_dazak.id
                    }
         return super().setUp()
 
@@ -51,8 +57,13 @@ class BaseAPITestCase(APITestCase):
         # Authentication credentials were not provided
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def get_list_with_admin_authentification(self):
+    def get_list_with_author_authentification(self):
+        self.client.logout()
+        self.api_authentication(self.get_token('dazak', 'password123'))
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def get_list_with_admin_authentification(self):
         # with admin authentification
         self.client.logout()
         self.api_authentication(self.get_token('admin', 'password123'))
