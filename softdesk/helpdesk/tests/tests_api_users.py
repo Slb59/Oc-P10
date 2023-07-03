@@ -93,7 +93,7 @@ class TestContributor(BaseAPITestCase):
         # with dazak : if the author is delete,
         # you must be superuser to create another one
         self.client.logout()
-        self.api_authentication(self.get_token('dazak', 'password123'))        
+        self.api_authentication(self.get_token('dazak', 'password123')) 
         response = self.client.get(self.url)
         data = response.json()["results"]
         self.assertEqual(len(data), 2)
@@ -101,11 +101,25 @@ class TestContributor(BaseAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(self.url)
         data = response.json()["results"]
+        self.assertEqual(len(data), 1)
 
-        # delete the author then verify the project data
+        # delete the author then verify the project data as admin
         response = self.client.delete(self.url+'1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get('/projects/1/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        print(response.data)
-        self.assertEqual(True, False)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.client.logout()
+        self.api_authentication(self.get_token('admin', 'password123'))
+        response = self.client.get('/projects/1/')
+        print(response.json())
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        excepted = {
+                'id': 1,
+                'title': 'Projet test',
+                "description": "Description du projet test",
+                "type": "BKE",
+                "contributors": [],
+                'author': None
+            }
+
+        self.assertEqual(excepted, response.json())

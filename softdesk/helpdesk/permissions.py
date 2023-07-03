@@ -19,7 +19,7 @@ class IsAuthorContributor(permissions.BasePermission):
     def has_permission(self, request, view):
         project_pk = view.kwargs.get('projects_pk')
         project = Project.objects.get(pk=project_pk)
-        if project.author == request.user:
+        if project.author == request.user or request.user.is_superuser:
             return True
         else:
             return False
@@ -28,11 +28,10 @@ class IsAuthorContributor(permissions.BasePermission):
 class IsContributor(permissions.BasePermission):
     # Custom permission for project contributor
     def has_permission(self, request, view):
-
         project_pk = view.kwargs.get('projects_pk')
         project = Project.objects.get(pk=project_pk)
         contributors = project.contributors.all()
-        if request.user in contributors:
+        if request.user in contributors or request.user.is_superuser:
             return True
         else:
             return False

@@ -76,7 +76,10 @@ class ProjectViewSet(ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        return Project.objects.filter(contributors=self.request.user)
+        if self.request.user.is_superuser:
+            return Project.objects.all()
+        else:
+            return Project.objects.filter(contributors=self.request.user)
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -109,6 +112,15 @@ class ContributorViewSet(ModelViewSet):
             raise ValidationError("this user is already contributor")
         else:
             serializer.save(project_contributor=project)
+
+    def perform_destroy(self, instance):
+
+        if instance.role == 'AUTH':
+            project = Project.objects.get(pk=self.kwargs.get('projects_pk'))
+            project.author = None
+            project.save()
+
+        return super().perform_destroy(instance)
 
     def get_permissions(self):
         if self.action in ['destroy', 'create']:
