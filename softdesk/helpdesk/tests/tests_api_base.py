@@ -25,6 +25,12 @@ class BaseAPITestCase(APITestCase):
             username='osynia', password='password123'
             )
 
+        # another user that could be a creator
+        # or for no-contributor testing
+        self.user_fiann = User.objects.create_user(
+            username='fiann', password='password123'
+            )
+
         self.p1 = {'title': 'Projet test',
                    "description": "Description du projet test",
                    "type": "BKE",
@@ -69,3 +75,20 @@ class BaseAPITestCase(APITestCase):
         self.api_authentication(self.get_token('admin', 'password123'))
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def delete_without_authentification(self):
+        self.client.logout()
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def delete_with_manager_authentification(self):
+        self.client.logout()
+        self.api_authentication(self.get_token('osynia', 'password123'))
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def delete_with_author_authentification(self):
+        self.client.logout()
+        self.api_authentication(self.get_token('dazak', 'password123'))
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

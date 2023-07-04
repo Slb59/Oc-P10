@@ -2,7 +2,7 @@ from django.db.utils import IntegrityError
 
 from rest_framework import status
 
-from softdesk.helpdesk.models import Project, Contributor, User
+from softdesk.helpdesk.models import Project, Contributor
 from .tests_api_base import BaseAPITestCase
 
 
@@ -11,11 +11,6 @@ class TestContributor(BaseAPITestCase):
     def setUp(self) -> None:
         super().setUp()
         self.url = '/projects/1/users/'
-
-        # create new user for adding a creator
-        self.user_fiann = User.objects.create_user(
-            username='fiann', password='password123'
-            )
 
         # create a new project
         self.api_authentication(self.get_token('dazak', 'password123'))
@@ -82,15 +77,10 @@ class TestContributor(BaseAPITestCase):
     def test_delete(self):
 
         # without authentification
-        self.client.logout()
-        response = self.client.delete(self.url+'1/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.delete_without_authentification()
 
         # with manager connection
-        self.client.logout()
-        self.api_authentication(self.get_token('osynia', 'password123'))
-        response = self.client.delete(self.url+'1/')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.delete_with_manager_authentification()
 
         # with dazak : if the author is delete,
         # you must be superuser to create another one
