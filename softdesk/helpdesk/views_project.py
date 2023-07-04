@@ -1,4 +1,5 @@
 from django.utils.decorators import method_decorator
+from django.db.utils import IntegrityError
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
@@ -7,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Project, Contributor
+from .models import Project, Contributor, User
 from .serializers_project import ProjectSerializer, ProjectDetailSerializer
 from .serializers_project import ContributorSerializer
 from .permissions import IsAuthor, IsContributor, IsAuthorContributor
@@ -111,6 +112,15 @@ class ContributorViewSet(ModelViewSet):
         if self.request.data.get('user_contributor') in user_list:
             raise ValidationError("this user is already contributor")
         else:
+            if self.request.data.get('role') == 'AUTH':
+                if project.author is None:
+                    project_author = User.objects.get(
+                        pk=self.request.data.get('user_contributor'))
+                    project.author = project_author
+                    project.save()
+                else:
+                    # it's impossible to have two authors
+                    raise IntegrityError
             serializer.save(project_contributor=project)
 
     def perform_destroy(self, instance):

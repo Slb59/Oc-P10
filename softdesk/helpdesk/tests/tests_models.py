@@ -69,7 +69,7 @@ class ContributorTestCase(BaseModelTestCase):
                 permission=Contributor.Permission.READ,
                 role=Contributor.Role.CREATOR  # only one creator ?
             )
-        self.assertEqual(IntegrityError, type(raised.exception)) 
+        self.assertEqual(IntegrityError, type(raised.exception))
 
 
 class IssueTestCase(BaseModelTestCase):

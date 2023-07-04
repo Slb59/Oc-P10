@@ -1,3 +1,5 @@
+from django.db.utils import IntegrityError
+
 from rest_framework import status
 
 from softdesk.helpdesk.models import Project, Contributor, User
@@ -93,7 +95,7 @@ class TestContributor(BaseAPITestCase):
         # with dazak : if the author is delete,
         # you must be superuser to create another one
         self.client.logout()
-        self.api_authentication(self.get_token('dazak', 'password123')) 
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.get(self.url)
         data = response.json()["results"]
         self.assertEqual(len(data), 2)
@@ -111,7 +113,6 @@ class TestContributor(BaseAPITestCase):
         self.client.logout()
         self.api_authentication(self.get_token('admin', 'password123'))
         response = self.client.get('/projects/1/')
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         excepted = {
                 'id': 1,
@@ -121,5 +122,44 @@ class TestContributor(BaseAPITestCase):
                 "contributors": [],
                 'author': None
             }
-
         self.assertEqual(excepted, response.json())
+
+    def test_create_author_after_delete(self):
+        # login as admin
+        self.client.logout()
+        self.api_authentication(self.get_token('admin', 'password123'))
+        # delete contributors
+        response = self.client.delete(self.url+'1/')
+        response = self.client.delete(self.url+'2/')
+        response = self.client.get(self.url)
+        data = response.json()["results"]
+        self.assertEqual(len(data), 0)
+        # add fiann as author
+        self.creator['role'] = 'AUTH'
+        response = self.client.post(self.url, self.creator)
+        # check the author of the project
+        response = self.client.get('/projects/1/')
+        contributor_expected = {
+            'id': 3, 'user_contributor': 4, 'permission': 'RD', 'role': 'AUTH'
+        }
+        excepted = {
+                'id': 1,
+                'title': 'Projet test',
+                "description": "Description du projet test",
+                "type": "BKE",
+                "contributors": [contributor_expected],
+                'author': self.user_fiann.id
+            }
+        self.assertEqual(excepted, response.json())
+
+    def test_create_auhor_as_exists_already_one(self):
+        # login as admin
+        self.client.logout()
+        self.api_authentication(self.get_token('admin', 'password123'))
+        # try adding fiann as author
+        self.creator['role'] = 'AUTH'
+        # response = self.client.post(self.url, self.creator)
+        with self.assertRaises(Exception) as raised:
+            response = self.client.post(self.url, self.creator)
+            print(response.json())  # code not reached ?
+        self.assertEqual(IntegrityError, type(raised.exception))
