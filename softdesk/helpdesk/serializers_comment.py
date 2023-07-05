@@ -17,4 +17,3 @@ class CommentSerializer(serializers.ModelSerializer):
         comment.author = self.context.get('request').user
         comment.save()
         return comment
-
