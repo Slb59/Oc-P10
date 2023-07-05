@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 
-from .models import Project, Issue
-from .serializers_issue import IssueSerializer
-from .permissions import IsAuthor, IsContributor
+from ..models import Project, Issue
+from ..serializers.serializers_issue import IssueSerializer
+from ..permissions import IsAuthor, IsContributor
 
 
 class IssueViewSet(ModelViewSet):

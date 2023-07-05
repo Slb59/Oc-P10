@@ -1,10 +1,10 @@
 from django.urls import path, include
 from rest_framework_nested import routers
 
-from .views_project import ProjectViewSet
-from .views_project import ContributorViewSet
-from .views_issue import IssueViewSet
-from .views_comment import CommentViewSet
+from .views.views_project import ProjectViewSet
+from .views.views_project import ContributorViewSet
+from .views.views_issue import IssueViewSet
+from .views.views_comment import CommentViewSet
 
 app_name = "helpdesk"
 

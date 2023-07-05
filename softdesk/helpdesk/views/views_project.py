@@ -8,11 +8,12 @@ from rest_framework.exceptions import ValidationError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Project, Contributor, User
-from .serializers_project import ProjectSerializer, ProjectDetailSerializer
-from .serializers_project import ContributorSerializer
-from .permissions import IsAuthor, IsContributor, IsAuthorContributor
-from .permissions import NoPermission
+from ..models import Project, Contributor, User
+from ..serializers.serializers_project import ProjectSerializer
+from ..serializers.serializers_project import ProjectDetailSerializer
+from ..serializers.serializers_project import ContributorSerializer
+from ..permissions import IsAuthor, IsContributor, IsAuthorContributor
+from ..permissions import NoPermission
 
 
 response_project_schema_200 = {

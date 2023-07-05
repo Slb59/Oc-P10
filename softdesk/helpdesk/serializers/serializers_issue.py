@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Issue
+from softdesk.helpdesk.models import Project, Issue
 
 
 class IssueSerializer(serializers.ModelSerializer):

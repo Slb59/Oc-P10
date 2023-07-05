@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Comment
+from softdesk.helpdesk.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):

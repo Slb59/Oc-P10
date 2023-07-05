@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 
-from .models import Comment, Issue
-from .serializers_comment import CommentSerializer
-from .permissions import IsAuthor, IsContributor
+from ..models import Comment, Issue
+from ..serializers.serializers_comment import CommentSerializer
+from ..permissions import IsAuthor, IsContributor
 
 
 class CommentViewSet(ModelViewSet):
