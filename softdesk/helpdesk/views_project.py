@@ -80,7 +80,7 @@ class ProjectViewSet(ModelViewSet):
         if self.request.user.is_superuser:
             return Project.objects.all()
         else:
-            return Project.objects.filter(contributors=self.request.user)
+            return Project.objects.filter(contributors=self.request.user.id)
 
     def get_serializer_class(self):
         if self.action == 'create':

@@ -16,16 +16,17 @@ helpdesk_router.register('projects', ProjectViewSet)
 project_router = routers.NestedSimpleRouter(
     helpdesk_router, 'projects', lookup='projects'
     )
-project_router.register('users', ContributorViewSet, basename='user')
-project_router.register('issues', IssueViewSet, basename='issue')
+project_router.register('users', ContributorViewSet, basename='users')
+project_router.register('issues', IssueViewSet, basename='issues')
 
 # add comments end point
 issue_router = routers.NestedSimpleRouter(
-    project_router, 'issues', lookup='issue'
+    project_router, 'issues', lookup='issues'
     )
-issue_router.register('comments', CommentViewSet, basename='comment')
+issue_router.register('comments', CommentViewSet, basename='comments')
 
 urlpatterns = [
     path('', include(helpdesk_router.urls)),
-    path('', include(project_router.urls), name='project'),
+    path('', include(project_router.urls), name='projects'),
+    path('', include(issue_router.urls), name='issues'),
 ]
