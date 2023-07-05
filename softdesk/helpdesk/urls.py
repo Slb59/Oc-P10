@@ -16,6 +16,11 @@ project_router = routers.NestedSimpleRouter(
 project_router.register('users', ContributorViewSet, basename='user')
 project_router.register('issues', IssueViewSet, basename='issue')
 
+issue_router = routers.NestedSimpleRouter(
+    project_router, 'issues', lookup='issue'
+    )
+issue_router.register('comments', ,basename='comment')
+
 urlpatterns = [
     path('', include(helpdesk_router.urls)),
     path('', include(project_router.urls), name='project'),
