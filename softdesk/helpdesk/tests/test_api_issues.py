@@ -1,8 +1,7 @@
-from .tests_api_base import BaseAPITestCase
-
 from rest_framework import status
 
-from softdesk.helpdesk.models import Project, Contributor
+from .tests_api_base import BaseAPITestCase
+from ..models import Project, Contributor
 
 
 class TestIssue(BaseAPITestCase):
