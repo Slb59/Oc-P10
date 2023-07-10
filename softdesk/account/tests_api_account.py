@@ -13,22 +13,131 @@ class TestUser(APITestCase):
             username='osynia', password='password123'
             )
 
+        self.user_osynia_dict = {
+            "username": "osynia",
+            "password": "password123"
+        }
+
         return super().setUp()
+
+    def authentifacated_as_osynia(self):
+        response = self.client.post('/login/', self.user_osynia_dict)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        token = response.data["access"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
     def test_login(self):
 
         response = self.client.login(username="osynia", password="password123")
         self.assertEqual(response, True)
 
-        user_test = {
-            "username": "osynia",
-            "password": "password123"
-        }
-        response = self.client.post('/login/', user_test)
+        response = self.client.post('/login/', self.user_osynia_dict)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertTrue("access" in response.data)
         self.assertTrue("refresh" in response.data)
 
+    def test_signup_list(self):
+
+        # you must be authentificated for getting list of users
+        response = self.client.get('/signup/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # get token as osynia
+        self.authentifacated_as_osynia()
+
+        # get list of users
+        response = self.client.get('/signup/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["results"]
+        self.assertEqual(len(data), 1)
+
+    def test_signup_create(self):
+
+        # anybody can create a new user
+        new_user = {
+            "username": "test",
+            "first_name": "test",
+            "last_name": "test",
+            "email": "test@example.com",
+            "password": "password123",
+            "post_description": "Le travail de test"
+        }
+        response = self.client.post('/signup/', new_user)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_signup_get(self):
-        self.assertTrue(False)
+
+        # you must be authentificated for getting a user information
+        response = self.client.get('/signup/1/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.authentifacated_as_osynia()
+        response = self.client.get('/signup/1/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        excepted = {
+                'id': 1,
+                'username': 'osynia',
+                "first_name": '',
+                'last_name': '',
+                'email': '',
+                'post_description': '',
+                'is_superuser': False
+            }
+        self.assertEqual(excepted, response.json())
+
+    def test_signup_update(self):
+
+        # you must be authentificated for updating a user information
+        self.user_osynia_dict['email'] = 'osynia@example.com'
+        response = self.client.put('/signup/1/', self.user_osynia_dict)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.authentifacated_as_osynia()
+        response = self.client.put('/signup/1/', self.user_osynia_dict)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # test update another user => forbidden
+        self.test_signup_create()
+        self.authentifacated_as_osynia()
+        new_user = {
+            "username": "J5nwS",
+            "first_name": "string",
+            "last_name": "string",
+            "email": "user@example.com",
+            "post_description": "string",
+            "is_superuser": True
+        }
+        response = self.client.put('/signup/2/', new_user)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # test update another user ok if osynia is superuser
+        self.user_osynia_dict['is_superuser'] = True
+        response = self.client.put('/signup/1/', self.user_osynia_dict)
+        self.authentifacated_as_osynia()
+        new_user = {
+            "username": "J5nwS",
+            "first_name": "string",
+            "last_name": "string",
+            "email": "user@example.com",
+            "post_description": "string",
+            "is_superuser": True
+        }
+        response = self.client.put('/signup/2/', new_user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_signup_delete(self):
+
+        # you must be authentificated for deleting a user
+        response = self.client.delete('/signup/1/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # connect as a superuser
+        self.authentifacated_as_osynia()
+        self.user_osynia_dict['is_superuser'] = True
+        self.user_osynia_dict['email'] = 'osynia@example.com'
+        response = self.client.put('/signup/1/', self.user_osynia_dict)
+        self.test_signup_create()
+        self.authentifacated_as_osynia()
+        response = self.client.delete('/signup/2/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
