@@ -15,7 +15,7 @@ class IssueViewSet(ModelViewSet):
 
     def get_queryset(self, *args, **kwargs):
         # projects_pk is the primary key of project
-        print(self.kwargs.get)
+        # print(self.kwargs.get)
         return Issue.objects.filter(project=self.kwargs.get('projects_pk'))
 
     def perform_create(self, serializer, *args, **kwargs):

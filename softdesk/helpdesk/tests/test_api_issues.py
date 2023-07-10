@@ -74,9 +74,9 @@ class TestIssue(BaseAPITestCase):
 
         # update with dazak, the author
         self.client.logout()
-        self.api_authentication(self.get_token('osynia', 'password123'))
+        self.api_authentication(self.get_token('dazak', 'password123'))
         response = self.client.put(self.url+'1/', self.issue)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete(self):
 

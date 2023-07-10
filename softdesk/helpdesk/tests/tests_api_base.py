@@ -2,7 +2,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from softdesk.account.models import User
+from ..models import User
 
 
 class BaseAPITestCase(APITestCase):

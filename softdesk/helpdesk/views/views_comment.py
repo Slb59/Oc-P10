@@ -15,7 +15,7 @@ class CommentViewSet(ModelViewSet):
 
     def get_queryset(self, *args, **kwargs):
         # issues_pk is the primary key of issue
-        print(self.kwargs.get)
+        # print(self.kwargs.get)
         return Comment.objects.filter(issue=self.kwargs.get('issue_pk'))
 
     def get_permissions(self):

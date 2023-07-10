@@ -22,9 +22,13 @@ class TestProject(BaseAPITestCase):
         # list only the project if contributor
         # create 2 projects
         response = self.client.post(self.url, self.p1)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.p1['title'] = 'Projet test 2'
         response = self.client.post(self.url, self.p1)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
         # add osynia as manager of the first project
+        
         project_test = Project.objects.get(id=1)
         Contributor.objects.create(
             user_contributor=self.user_osynia,
