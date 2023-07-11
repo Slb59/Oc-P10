@@ -34,8 +34,9 @@ pipenv shell
 * Depuis votre navigateur habituel, l'accès à l'api se fait via l'url : `http:/127.0.0.1:8000`
 * Pour creer un compte administrateur, utilisez la commande : `python manage.py createsuperuser`
 * Pour accéder à l'administration : `http://127.0.0.1:8000/admin`
+* Les endpoints peuvent êtres testés ici : `http://127.0.0.1:8000/schema`
 
 ## Documentation
-* Vous pouvez accéder à la documentation de l'API ici : <<< lien à ajouter >>>
+* Vous pouvez accéder à la documentation de l'API ici : `http://127.0.0.1:8000/docs`
 
 
