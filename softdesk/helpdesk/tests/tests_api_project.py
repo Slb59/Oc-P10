@@ -1,10 +1,10 @@
 from rest_framework import status
 
 from softdesk.helpdesk.models import Project, Contributor
-from .tests_api_base import BaseAPITestCase
+from .tests_api_base import ListAPITestCase
 
 
-class TestProject(BaseAPITestCase):
+class TestProject(ListAPITestCase):
 
     def setUp(self) -> None:
         super().setUp()
@@ -12,10 +12,10 @@ class TestProject(BaseAPITestCase):
 
     def format_datetime(self, value):
         return value.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-
+    
     def test_list(self):
 
-        self.get_list_without_autentification()
+        # self.get_list_without_autentification()
         self.get_list_with_admin_authentification()
         self.get_list_with_author_authentification()
 
@@ -28,7 +28,7 @@ class TestProject(BaseAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # add osynia as manager of the first project
-        
+
         project_test = Project.objects.get(id=1)
         Contributor.objects.create(
             user_contributor=self.user_osynia,

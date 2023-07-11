@@ -3,10 +3,10 @@ from django.db.utils import IntegrityError
 from rest_framework import status
 
 from softdesk.helpdesk.models import Project, Contributor
-from .tests_api_base import BaseAPITestCase
+from .tests_api_base import ListAPITestCase
 
 
-class TestContributor(BaseAPITestCase):
+class TestContributor(ListAPITestCase):
 
     def setUp(self) -> None:
         super().setUp()

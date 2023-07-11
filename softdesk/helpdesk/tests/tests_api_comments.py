@@ -1,14 +1,13 @@
 from rest_framework import status
 
-from .tests_api_base import BaseAPITestCase
-from ..models import Comment, User, Issue
+from .tests_api_base import ListAPITestCase
 
 
-class TestComment(BaseAPITestCase):
+class TestComment(ListAPITestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        self.url = '/projects/1/issues/1/comment/'
+        self.url = '/projects/1/issues/1/comments/'
 
         # create a new project
         self.api_authentication(self.get_token('dazak', 'password123'))
@@ -42,14 +41,12 @@ class TestComment(BaseAPITestCase):
     def test_list(self):
         self.get_list_with_admin_authentification()
         self.get_list_with_author_authentification()
-        # the manager can read the comment
-        dazak = User.objects.filter(username='dazak')
-        issue = Issue.objects.filter(id=1)
-        Comment.objects.create(
-            description='Commentaire d''un problème pour le test',
-            author=dazak,
-            issue=issue
-        )
+        # the manager can read the comment of another user
+        self.client.logout()
+        self.api_authentication(self.get_token('dazak', 'password123'))
+        response = self.client.post(self.url, self.comment)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
         self.client.logout()
         self.api_authentication(self.get_token('osynia', 'password123'))
         response = self.client.get(self.url)
@@ -64,7 +61,6 @@ class TestComment(BaseAPITestCase):
         # test creation with the manager
         self.client.logout()
         self.api_authentication(self.get_token('osynia', 'password123'))
-        print(self.url, self.comment)
         response = self.client.post(self.url, self.comment)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -73,7 +69,6 @@ class TestComment(BaseAPITestCase):
         # create a comment with dazak
         self.client.logout()
         self.api_authentication(self.get_token('dazak', 'password123'))
-        print(self.url)
         response = self.client.post(self.url, self.comment)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -86,7 +81,6 @@ class TestComment(BaseAPITestCase):
         # update with dazak the author
         self.client.logout()
         self.api_authentication(self.get_token('dazak', 'password123'))
-        print(self.url)
         response = self.client.put(self.url+'1/', self.comment)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -95,7 +89,6 @@ class TestComment(BaseAPITestCase):
         # create a comment with dazak
         self.client.logout()
         self.api_authentication(self.get_token('dazak', 'password123'))
-        print(self.url)
         response = self.client.post(self.url, self.comment)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

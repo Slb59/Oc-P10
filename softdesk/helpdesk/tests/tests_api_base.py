@@ -55,7 +55,38 @@ class BaseAPITestCase(APITestCase):
 
     def api_authentication(self, token=None):
         token = self.token if (token is None) else token
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)    
+
+    def delete_without_authentification(self):
+        self.client.logout()
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def delete_with_manager_authentification(self):
+        self.client.logout()
+        self.api_authentication(self.get_token('osynia', 'password123'))
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def delete_with_author_authentification(self):
+        self.client.logout()
+        self.api_authentication(self.get_token('dazak', 'password123'))
+        response = self.client.delete(self.url+'1/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class ListAPITestCase(BaseAPITestCase):
+
+    def setUp(self) -> None:
+
+        self.url = ''
+        return super().setUp()
+
+    def test_list_without_autentification(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        # Authentication credentials were not provided
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def get_list_without_autentification(self):
         self.client.logout()
@@ -75,20 +106,3 @@ class BaseAPITestCase(APITestCase):
         self.api_authentication(self.get_token('admin', 'password123'))
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def delete_without_authentification(self):
-        self.client.logout()
-        response = self.client.delete(self.url+'1/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def delete_with_manager_authentification(self):
-        self.client.logout()
-        self.api_authentication(self.get_token('osynia', 'password123'))
-        response = self.client.delete(self.url+'1/')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def delete_with_author_authentification(self):
-        self.client.logout()
-        self.api_authentication(self.get_token('dazak', 'password123'))
-        response = self.client.delete(self.url+'1/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

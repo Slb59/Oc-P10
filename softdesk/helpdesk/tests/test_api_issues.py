@@ -1,10 +1,10 @@
 from rest_framework import status
 
-from .tests_api_base import BaseAPITestCase
+from .tests_api_base import ListAPITestCase
 from ..models import Project, Contributor
 
 
-class TestIssue(BaseAPITestCase):
+class TestIssue(ListAPITestCase):
 
     def setUp(self) -> None:
         super().setUp()
