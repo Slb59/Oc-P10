@@ -34,8 +34,4 @@ urlpatterns = [
         ),
     path('docs/', schema_view.with_ui('redoc', cache_timeout=0),
          name='schema-redoc'),
-    # path('docs/', include_docs_urls(
-    #     title=API_TITLE,
-    #     description=API_DESCRIPTION
-    #     )),
 ]

@@ -12,7 +12,7 @@ class TestProject(ListAPITestCase):
 
     def format_datetime(self, value):
         return value.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    
+
     def test_list(self):
 
         # self.get_list_without_autentification()
