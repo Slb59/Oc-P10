@@ -1,5 +1,7 @@
+from django.db.utils import IntegrityError
 from rest_framework.test import APITestCase
 from rest_framework import status
+
 
 from .models import User
 
@@ -7,6 +9,8 @@ from .models import User
 class TestUser(APITestCase):
 
     def setUp(self) -> None:
+
+        super().setUp()
 
         # create a user for login testing
         self.user_osynia = User.objects.create_user(
@@ -17,10 +21,8 @@ class TestUser(APITestCase):
         self.user_osynia_dict = {
             "username": "osynia",
             "password": "password123",
-            "birth_date": '1970-01-01'
+            "birth_date": "1970-01-01"
         }
-
-        return super().setUp()
 
     def authentifacated_as_osynia(self):
         response = self.client.post('/login/', self.user_osynia_dict)
@@ -69,6 +71,8 @@ class TestUser(APITestCase):
         response = self.client.post('/signup/', new_user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_signup_create_minus15yearsold(self):
+
         # age must be > 15
         new_user = {
             "username": "test2",
@@ -79,9 +83,9 @@ class TestUser(APITestCase):
             "post_description": "Le travail de test",
             "birth_date": '2023-01-01'
         }
-        response = self.client.post('/signup/', new_user)
-        print(response.json())
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        with self.assertRaises(Exception) as raised:
+            self.client.post('/signup/', new_user)
+        self.assertEqual(IntegrityError, type(raised.exception))
 
     def test_signup_get(self):
 

@@ -1,5 +1,6 @@
 from django.test import TestCase
-# from django.core.exceptions import ValidationError
+from django.db.utils import IntegrityError
+
 
 from .models import User
 
@@ -25,15 +26,12 @@ class UserTestCase(TestCase):
         self.assertEqual(email, 'testuser1@gmail.com')
         self.assertEqual(post_description, 'Description')
 
-    # def test_user_minus15years(self):
-    #     testuser2 = User.objects.create_user(
-    #         username='testuser2', password='98765abc',
-    #         email='testuser2@gmail.com',
-    #         post_description='Description',
-    #         birth_date='2023-01-01'
-    #         )
-    #     testuser2.save()
-        # with self.assertRaises(Exception) as raised:
-        #     testuser2.save()
-        # self.assertEqual(ValidationError, type(raised.exception))
-        
+    def test_user_minus15years(self):
+        with self.assertRaises(Exception) as raised:
+            User.objects.create_user(
+                username='testuser2', password='98765abc',
+                email='testuser2@gmail.com',
+                post_description='Description',
+                birth_date='2023-01-01'
+            )
+        self.assertEqual(IntegrityError, type(raised.exception))

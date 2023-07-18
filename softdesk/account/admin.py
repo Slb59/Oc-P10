@@ -8,8 +8,10 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
-    list_display = ['username', 'date_joined', 'is_staff', 'post_description']
+    list_display = [
+        'username', 'date_joined', 'is_staff', 'post_description', 'birth_date'
+        ]
     fieldsets = auth_admin.UserAdmin.fieldsets + (
-        (None, {"fields": ["post_description"]}),)
+        (None, {"fields": ["post_description", "birth_date"]}),)
     add_fieldsets = auth_admin.UserAdmin.add_fieldsets + (
-        (None, {"fields": ["post_description"]}),)
+        (None, {"fields": ["post_description", 'brith_date']}),)

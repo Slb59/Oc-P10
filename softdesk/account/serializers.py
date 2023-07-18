@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 from .models import User
 
@@ -36,14 +34,5 @@ class UserSignupSerializer(serializers.ModelSerializer):
             ]
 
     def create(self, validated_data):
-        self.birth_date_check()
         user = User.objects.create_user(**validated_data)
         return user
-    
-    def birth_date_check(self):
-        # Ensures constraint on model level, raises ValidationError
-        if self.age < 15:
-            # raise error for field
-            raise ValidationError(
-                {'birth_date': _('The user must be at least 15 years old')}
-                )
