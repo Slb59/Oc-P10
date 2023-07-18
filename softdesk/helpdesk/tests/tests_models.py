@@ -30,6 +30,7 @@ class ProjectTestCase(BaseModelTestCase):
         p = Project.objects.get(title='Projet 1')
         self.assertEqual(p.description, 'Tout premier projet')
         self.assertEqual(p.get_type(), Project.Platform.FRONTEND)
+        print(p.created_time)
 
 
 class ContributorTestCase(BaseModelTestCase):

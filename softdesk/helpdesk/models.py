@@ -4,7 +4,17 @@ from django.utils.translation import gettext_lazy as _
 from softdesk.account.models import User
 
 
-class Project(models.Model):
+class DateFields(models.Model):
+    created_time = models.DateTimeField(
+        auto_now_add=True
+    )
+    updated_time = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Project(DateFields):
 
     class Platform(models.TextChoices):
         BACKEND = "BKE", _('Backend')
@@ -38,7 +48,7 @@ class Project(models.Model):
         return Project.Platform(self.type)
 
 
-class Contributor(models.Model):
+class Contributor(DateFields):
 
     # class Permission(models.TextChoices):
     #     READ = "RD", _('Read')
@@ -60,10 +70,6 @@ class Contributor(models.Model):
         blank=True, null=True
         )
 
-    # permission = models.CharField(
-    #     max_length=2, choices=Permission.choices, default="UD"
-    #     )
-
     role = models.CharField(
         max_length=4, choices=Role.choices, default="AUTH")
 
@@ -74,7 +80,7 @@ class Contributor(models.Model):
         return "Contributor: " + str(self.user_contributor)
 
 
-class Issue(models.Model):
+class Issue(DateFields):
 
     class Tag(models.TextChoices):
         BUG = "BUG", _('Bug')
@@ -113,13 +119,12 @@ class Issue(models.Model):
         to=User, related_name="assignee", on_delete=models.CASCADE,
         blank=True, null=True
         )
-    created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Issue: ' + self.title
 
 
-class Comment(models.Model):
+class Comment(DateFields):
 
     description = models.CharField(max_length=512, default="")
     author = models.ForeignKey(
@@ -130,8 +135,6 @@ class Comment(models.Model):
         to=Issue, related_name="issue", on_delete=models.CASCADE,
         blank=True, null=True
         )
-
-    created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Comment: ' + self.description

@@ -16,10 +16,6 @@ class User(auth_models.AbstractUser):
     def age(self):
         return int((datetime.now().date() - self.birth_date).days / 365.25)
 
-    # @property
-    # def max_birth_date(self):
-    #     return datetime.today() - timedelta(days=365*15)
-
     class Meta:
         constraints = [
             # Ensures constraint on DB level, raises IntegrityError
