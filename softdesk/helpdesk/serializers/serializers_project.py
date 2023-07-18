@@ -4,7 +4,7 @@ from softdesk.helpdesk.models import Project, Contributor
 
 
 class ContributorSerializer(serializers.ModelSerializer):
-
+    """ Serialize the Contributor Model for projects>users endpoints """
     class Meta:
         model = Contributor
         fields = [
@@ -14,6 +14,7 @@ class ContributorSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    """ Serialize the Project Model for projects endpoints """
 
     contributors = serializers.SerializerMethodField()
 

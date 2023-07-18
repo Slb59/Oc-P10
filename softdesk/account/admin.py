@@ -8,6 +8,7 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
+    """ Spécifications for administration of users """
     list_display = [
         'username', 'date_joined', 'is_staff', 'post_description', 'birth_date'
         ]

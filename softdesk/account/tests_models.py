@@ -6,6 +6,7 @@ from .models import User
 
 
 class UserTestCase(TestCase):
+    """ tests the model User """
 
     @classmethod
     def setUpTestData(cls) -> None:

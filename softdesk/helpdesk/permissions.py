@@ -3,6 +3,7 @@ from .models import Project
 
 
 class NoPermission(permissions.BasePermission):
+    """ Use to determine a no permission access """
     def has_object_permission(self, request, view, obj):
         return False
 
@@ -16,6 +17,7 @@ class IsAuthor(permissions.BasePermission):
 
 
 class IsAuthorContributor(permissions.BasePermission):
+    # Custom permission for a contributor as author on a project
     def has_permission(self, request, view):
         project_pk = view.kwargs.get('projects_pk')
         project = Project.objects.get(pk=project_pk)

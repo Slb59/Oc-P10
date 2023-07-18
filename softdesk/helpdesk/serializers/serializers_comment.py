@@ -4,7 +4,7 @@ from softdesk.helpdesk.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-
+    """ Serialize the Comment Model for project>issue>comment endpoints """
     class Meta:
         model = Comment
         fields = ['description', 'author', 'issue', 'created_time']

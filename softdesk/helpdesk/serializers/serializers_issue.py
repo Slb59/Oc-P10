@@ -3,6 +3,7 @@ from softdesk.helpdesk.models import Project, Issue
 
 
 class IssueSerializer(serializers.ModelSerializer):
+    """ Serialize the Issue Model for project>issue endpoints """
 
     class Meta:
         model = Issue

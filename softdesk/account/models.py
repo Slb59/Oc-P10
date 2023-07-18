@@ -5,6 +5,7 @@ from django.contrib.auth import models as auth_models
 
 
 class User(auth_models.AbstractUser):
+    """ Complete the standard user class """
     post_description = models.CharField(max_length=128, default="")
     birth_date = models.DateField(
         blank=False, null=False, default='1970-01-01'

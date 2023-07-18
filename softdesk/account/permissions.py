@@ -2,6 +2,7 @@ from rest_framework import permissions
 
 
 class UserPermission(permissions.BasePermission):
+    """ Describe the access permission for user endpoints """
 
     def has_permission(self, request, view):
         if view.action == 'list':

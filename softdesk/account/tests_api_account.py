@@ -7,8 +7,10 @@ from .models import User
 
 
 class TestUser(APITestCase):
+    """ Tests for login and signup endpoints """
 
     def setUp(self) -> None:
+        """ setup tests with creating one user """
 
         super().setUp()
 
@@ -25,13 +27,14 @@ class TestUser(APITestCase):
         }
 
     def authentifacated_as_osynia(self):
+        """ for connected with token the user created in setup method """
         response = self.client.post('/login/', self.user_osynia_dict)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         token = response.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
     def test_login(self):
-
+        """ login must give an access and refresh token """
         response = self.client.login(username="osynia", password="password123")
         self.assertEqual(response, True)
 

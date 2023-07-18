@@ -5,6 +5,7 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """ Serialize the User Model for login endpoints """
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
         )
@@ -20,6 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSignupSerializer(serializers.ModelSerializer):
+    """ Serialize the User Model for signup endpoints """
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
         )

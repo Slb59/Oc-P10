@@ -6,6 +6,7 @@ from .models import Contributor
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    """ Spécifications for administration of projects """
     list_display = [
         "title", "description", "type",
         "created_time", "updated_time"
@@ -18,6 +19,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
+    """ Spécifications for administration of issues """
     list_display = [
         "title", "tag", "priority", "status",
         "created_time", "updated_time"
@@ -30,6 +32,7 @@ class IssueAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
+    """ Spécifications for administration of comments """
     list_display = [
         "description",
         "created_time", "updated_time",
@@ -41,6 +44,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Contributor)
 class ContributorAdmin(admin.ModelAdmin):
+    """ Spécifications for administration of contributors """
     list_display = [
         "project_contributor", "user_contributor", "role",
         "created_time", "updated_time"

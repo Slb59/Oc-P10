@@ -5,6 +5,7 @@ from softdesk.account.models import User
 
 
 class DateFields(models.Model):
+    """ a common class for timestamping """
     created_time = models.DateTimeField(
         auto_now_add=True
     )
@@ -15,6 +16,7 @@ class DateFields(models.Model):
 
 
 class Project(DateFields):
+    """ Spécifications for describing a project """
 
     class Platform(models.TextChoices):
         BACKEND = "BKE", _('Backend')
@@ -49,6 +51,8 @@ class Project(DateFields):
 
 
 class Contributor(DateFields):
+    """ Spécifications for describing
+      a contributor of a project """
 
     # class Permission(models.TextChoices):
     #     READ = "RD", _('Read')
@@ -81,6 +85,8 @@ class Contributor(DateFields):
 
 
 class Issue(DateFields):
+    """ Spécifications for describing a issue
+     on a project """
 
     class Tag(models.TextChoices):
         BUG = "BUG", _('Bug')
@@ -125,6 +131,8 @@ class Issue(DateFields):
 
 
 class Comment(DateFields):
+    """ Spécifications for describing a comment
+     on a issue """
 
     description = models.CharField(max_length=512, default="")
     author = models.ForeignKey(
