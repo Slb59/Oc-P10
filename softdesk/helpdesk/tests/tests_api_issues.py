@@ -31,29 +31,32 @@ class TestIssue(ListAPITestCase):
         }
 
     def test_list(self):
+        """ tests get issues of project 1 """        
         self.get_list_without_autentification()
         self.get_list_with_admin_authentification()
         self.get_list_with_author_authentification()
 
     def test_create(self):
-
+        """ tests create issue on project 1 """
+        
         # Authentication credentials were not provided
         self.client.logout()
         response = self.client.post(self.url, self.issue)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
+        
         # or somebody that is not a contributor
         self.api_authentication(self.get_token('fiann', 'password123'))
         response = self.client.post(self.url, self.issue)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
+        
         # test creation with the manager
         self.client.logout()
         self.api_authentication(self.get_token('osynia', 'password123'))
         response = self.client.post(self.url, self.issue)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)        
 
     def test_update(self):
+        """ tests updating first issue of project 1 """
 
         # create an issue with dazak
         self.client.logout()
@@ -79,6 +82,7 @@ class TestIssue(ListAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete(self):
+        """ create an issue on project 1 and delete it """
 
         # create an issue with dazak
         self.client.logout()

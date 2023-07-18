@@ -9,6 +9,8 @@ class User(auth_models.AbstractUser):
     birth_date = models.DateField(
         blank=False, null=False, default='1970-01-01'
         )
+    can_be_contacted = models.BooleanField(default=False)
+    can_data_be_shared = models.BooleanField(default=False)
 
     @property
     def age(self):

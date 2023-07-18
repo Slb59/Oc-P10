@@ -104,7 +104,9 @@ class TestUser(APITestCase):
                 'email': '',
                 'post_description': '',
                 "birth_date": '1970-01-01',
-                'is_superuser': False
+                'is_superuser': False,
+                'can_be_contacted': False,
+                'can_data_be_shared': False
             }
         self.assertEqual(excepted, response.json())
 

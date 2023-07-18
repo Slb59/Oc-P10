@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             'id', 'username',
             'first_name', 'last_name',
             'email', 'post_description', 'is_superuser',
-            'birth_date'
+            'birth_date', "can_be_contacted", "can_data_be_shared"
             ]
 
 
@@ -30,7 +30,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             'id', 'username',
             'first_name', 'last_name',
             'email', 'password', 'post_description',
-            'birth_date'
+            'birth_date', "can_be_contacted", "can_data_be_shared"
             ]
 
     def create(self, validated_data):

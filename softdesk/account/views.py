@@ -1,7 +1,4 @@
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
-# from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 
@@ -15,6 +12,7 @@ class UserViewSet(ModelViewSet):
     """
     User management.
     Groups all access points for creating, updating and deleting users.
+    A user must be 15 years old to register
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer

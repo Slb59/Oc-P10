@@ -29,7 +29,6 @@ class IssueSerializer(serializers.ModelSerializer):
 
         # If assignee is filled, check user is contributors
         # else force to the author as default
-        print(issue.assignee)
         if issue.assignee is not None:
             if issue.assignee not in project_contributors:
                 issue.assignee = issue.author

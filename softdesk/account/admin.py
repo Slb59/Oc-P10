@@ -12,6 +12,14 @@ class UserAdmin(auth_admin.UserAdmin):
         'username', 'date_joined', 'is_staff', 'post_description', 'birth_date'
         ]
     fieldsets = auth_admin.UserAdmin.fieldsets + (
-        (None, {"fields": ["post_description", "birth_date"]}),)
+        (None, {"fields": [
+            "post_description",
+            "birth_date",
+            "can_be_contacted", "can_data_be_shared"
+            ]}),)
     add_fieldsets = auth_admin.UserAdmin.add_fieldsets + (
-        (None, {"fields": ["post_description", 'brith_date']}),)
+        (None, {"fields": [
+            "post_description",
+            'brith_date',
+            "can_be_contacted", "can_data_be_shared"
+            ]}),)

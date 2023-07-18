@@ -55,7 +55,7 @@ class BaseAPITestCase(APITestCase):
 
     def api_authentication(self, token=None):
         token = self.token if (token is None) else token
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)    
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
     def delete_without_authentification(self):
         self.client.logout()
