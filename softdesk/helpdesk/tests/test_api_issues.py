@@ -90,5 +90,3 @@ class TestIssue(ListAPITestCase):
         self.delete_without_authentification()
         self.delete_with_manager_authentification()
         self.delete_with_author_authentification()
-
-

@@ -40,9 +40,9 @@ class Project(models.Model):
 
 class Contributor(models.Model):
 
-    class Permission(models.TextChoices):
-        READ = "RD", _('Read')
-        ALL = "UD", _('Update and delete')
+    # class Permission(models.TextChoices):
+    #     READ = "RD", _('Read')
+    #     ALL = "UD", _('Update and delete')
 
     class Role(models.TextChoices):
         AUTHOR = "AUTH", _('Author')
@@ -60,9 +60,9 @@ class Contributor(models.Model):
         blank=True, null=True
         )
 
-    permission = models.CharField(
-        max_length=2, choices=Permission.choices, default="UD"
-        )
+    # permission = models.CharField(
+    #     max_length=2, choices=Permission.choices, default="UD"
+    #     )
 
     role = models.CharField(
         max_length=4, choices=Role.choices, default="AUTH")

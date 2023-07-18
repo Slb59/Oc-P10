@@ -32,9 +32,9 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Contributor)
 class ContributorAdmin(admin.ModelAdmin):
     list_display = [
-        "project_contributor", "user_contributor", "role", "permission"
+        "project_contributor", "user_contributor", "role"
         ]
-    list_filter = ["role", "permission"]
+    list_filter = ["role"]
     search_fields = [
         "project_contributor__title", "user_contributor__username"
         ]

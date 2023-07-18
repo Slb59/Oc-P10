@@ -18,7 +18,6 @@ class BaseModelTestCase(TestCase):
             title='Projet 1',
             description='Tout premier projet',
             type='FRE',
-            # author=cls.osy
             )
 
 
@@ -47,13 +46,11 @@ class ContributorTestCase(BaseModelTestCase):
         Contributor.objects.create(
             user_contributor=self.dazak,
             project_contributor=self.p1,
-            permission=Contributor.Permission.READ,
             role=Contributor.Role.MANAGER  # only one manager ?
         )
         Contributor.objects.create(
             user_contributor=self.fiann,
             project_contributor=self.p1,
-            permission=Contributor.Permission.READ,
             role=Contributor.Role.CREATOR  # only one creator ?
         )
 
@@ -66,7 +63,6 @@ class ContributorTestCase(BaseModelTestCase):
             Contributor.objects.create(
                 user_contributor=self.fiann,
                 project_contributor=self.p1,
-                permission=Contributor.Permission.READ,
                 role=Contributor.Role.CREATOR  # only one creator ?
             )
         self.assertEqual(IntegrityError, type(raised.exception))

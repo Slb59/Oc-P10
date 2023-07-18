@@ -10,12 +10,14 @@ class TestUser(APITestCase):
 
         # create a user for login testing
         self.user_osynia = User.objects.create_user(
-            username='osynia', password='password123'
+            username='osynia', password='password123',
+            birth_date='1970-01-01'
             )
 
         self.user_osynia_dict = {
             "username": "osynia",
-            "password": "password123"
+            "password": "password123",
+            "birth_date": '1970-01-01'
         }
 
         return super().setUp()
@@ -61,10 +63,25 @@ class TestUser(APITestCase):
             "last_name": "test",
             "email": "test@example.com",
             "password": "password123",
-            "post_description": "Le travail de test"
+            "post_description": "Le travail de test",
+            "birth_date": '1970-01-01'
         }
         response = self.client.post('/signup/', new_user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # age must be > 15
+        new_user = {
+            "username": "test2",
+            "first_name": "test2",
+            "last_name": "test2",
+            "email": "test2@example.com",
+            "password": "password123",
+            "post_description": "Le travail de test",
+            "birth_date": '2023-01-01'
+        }
+        response = self.client.post('/signup/', new_user)
+        print(response.json())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_signup_get(self):
 
@@ -82,6 +99,7 @@ class TestUser(APITestCase):
                 'last_name': '',
                 'email': '',
                 'post_description': '',
+                "birth_date": '1970-01-01',
                 'is_superuser': False
             }
         self.assertEqual(excepted, response.json())
@@ -106,6 +124,7 @@ class TestUser(APITestCase):
             "last_name": "string",
             "email": "user@example.com",
             "post_description": "string",
+            "birth_date": '1970-01-01',
             "is_superuser": True
         }
         response = self.client.put('/signup/2/', new_user)
@@ -121,6 +140,7 @@ class TestUser(APITestCase):
             "last_name": "string",
             "email": "user@example.com",
             "post_description": "string",
+            "birth_date": '1970-01-01',
             "is_superuser": True
         }
         response = self.client.put('/signup/2/', new_user)

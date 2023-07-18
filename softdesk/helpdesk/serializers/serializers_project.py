@@ -9,13 +9,11 @@ class ContributorSerializer(serializers.ModelSerializer):
         model = Contributor
         fields = [
             'id', 'user_contributor',
-            'permission', 'role'
+            'role'
             ]
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    # contributors = ContributorSerializer(
-    #     source='contributing', read_only=True, many=True)
 
     contributors = serializers.SerializerMethodField()
 
@@ -43,8 +41,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
-    # contributors = ContributorSerializer(
-    #     source='contributing', read_only=True, many=True)
 
     contributors = serializers.SerializerMethodField()
 
@@ -83,7 +79,6 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             contributor = Contributor(
                 user_contributor=request_user,
                 project_contributor=project,
-                permission=Contributor.Permission.ALL,
                 role=Contributor.Role.AUTHOR
             )
 

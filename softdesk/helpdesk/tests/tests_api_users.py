@@ -27,7 +27,6 @@ class TestContributor(ListAPITestCase):
         self.creator = {
             "user_contributor": 4,  # fiann
             "project_contributor": 1,
-            "permission": "RD",
             "role": "CREA",
         }
 
@@ -130,7 +129,7 @@ class TestContributor(ListAPITestCase):
         # check the author of the project
         response = self.client.get('/projects/1/')
         contributor_expected = {
-            'id': 3, 'user_contributor': 4, 'permission': 'RD', 'role': 'AUTH'
+            'id': 3, 'user_contributor': 4, 'role': 'AUTH'
         }
         excepted = {
                 'id': 1,
