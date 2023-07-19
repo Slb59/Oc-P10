@@ -18,7 +18,7 @@ L'application permet de :
 ## Technologie utilisée
 * Le projet est développé avec le framework REST Django, il s'agit d'une API REST. 
 * Les données sont sauvegardées dans une base de données sqlite3.
-* Postman a été utiliser pour tester les points de terminaison de l'API et la documenter
+* Un swagger a été utilisé pour tester les points de terminaison de l'API et la documenter
 
 ## Installation
 * Téléchargez et dézippez le repository github
